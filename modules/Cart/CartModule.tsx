@@ -1,6 +1,6 @@
 import { FontAwesome } from '@expo/vector-icons'
 import React from 'react'
-import { View, Text,Image ,TouchableOpacity,ScrollView, Dimensions,Animated} from 'react-native'
+import { View, Text,Image ,Easing,TouchableOpacity,ScrollView, Dimensions,Animated} from 'react-native'
 const { width, height } = Dimensions.get('window')
 export default function CartModule() {
 /* set cartdata */
@@ -9,6 +9,7 @@ const [cartData,setCartData] = React.useState([]);
 /* set animation */
 const modalAnimatedValue = React.useRef(new Animated.Value(0)).current;
 const opacityAnimatedValue = React.useRef(new Animated.Value(0)).current;
+const ringAnimatedValue = React.useRef(new Animated.Value(0)).current;
 
 /* set position x and y */
 const [x,setX] = React.useState(0);
@@ -16,8 +17,10 @@ const [y,setY] = React.useState(0);
 
 /* event add to cart */
 const add_cart =(id : any,x : number, y : number)=>{
+    console.log("first",x,y);
     setY(y);
     setX(x);
+    ringAnimatedValue.setValue(0);
     Animated.parallel([
         Animated.timing(opacityAnimatedValue, {
             toValue: 1,
@@ -27,6 +30,7 @@ const add_cart =(id : any,x : number, y : number)=>{
         Animated.timing(modalAnimatedValue, {
             toValue: 1,
             duration: 1000,
+            easing: Easing.linear, // or Easing.ease, or any other easing function
             useNativeDriver: false
         })
     ]).start();
@@ -34,13 +38,23 @@ const add_cart =(id : any,x : number, y : number)=>{
     setTimeout(() => {
         setX(0);
         setY(0);
+        setCartData([...cartData,id])
+        ring_animated_cart();
         modalAnimatedValue.setValue(0);
         opacityAnimatedValue.setValue(0);
-        setCartData([...cartData,id])
     },1000);
 
 
   
+}
+
+/* event animation cart */
+const ring_animated_cart = ()=>{
+    Animated.timing(ringAnimatedValue, {
+        toValue: 1,
+        duration: 200,
+        useNativeDriver: false
+    }).start();
 }
 
  /* set data product */
@@ -106,7 +120,21 @@ const add_cart =(id : any,x : number, y : number)=>{
                             <View className='w-6 h-6 bg-red-500 rounded-full items-center justify-center absolute -top-2 -right-2 z-50'>
                                 <Text className='font-bold text-white '>{cartData.length}</Text>
                             </View>
-                            <FontAwesome name="cart-arrow-down" size={30} color="black" />
+                            <Animated.View 
+                            style={
+                                {
+                                    transform: [
+                                        {
+                                            translateY:ringAnimatedValue.interpolate({
+                                                inputRange:[0,0.25,0.5,0.75,1],
+                                                outputRange:[0,-10,0,10,0]
+                                            })
+                                        }
+                                    ]
+                                }
+                            }>
+                                <FontAwesome name="cart-arrow-down" size={30} color="black" />
+                            </Animated.View>
                     </View>
               </View>
           </View>
@@ -121,7 +149,7 @@ const add_cart =(id : any,x : number, y : number)=>{
                             <View key={index} className='w-1/2 p-2'
                                 onLayout={(e) => {
                                    const {x,y,width,height} = e.nativeEvent.layout;
-                                  
+                                  // s console.log(width)
                                 }
                             }
                             >
@@ -149,22 +177,23 @@ const add_cart =(id : any,x : number, y : number)=>{
        <Animated.View className='w-full absolute top-5 left-5'
        style={{
          opacity: opacityAnimatedValue.interpolate({
-            inputRange: [0, 1],
-            outputRange: [0, 1]
+            inputRange: [0,0.25,0.5,0.75,1],
+            outputRange: [0,0.25,0.5,0.75,1]
          }),
          transform:[
             {
-                translateY: modalAnimatedValue.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [y, 75]
-                }),
-               
-            },{
                 translateX: modalAnimatedValue.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [x, width-70]
+                    inputRange: [0,0.25,0.5,0.75,1],
+                    outputRange: [x,90,85,80,width-70]
                 })
-            }
+            },
+            {
+                translateY: modalAnimatedValue.interpolate({
+                  inputRange: [0,1],
+                  outputRange: [y, 75] // Bay lên rồi rơi xuống
+                })
+              },
+              
          ]
        }}
        >

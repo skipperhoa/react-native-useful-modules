@@ -14,6 +14,7 @@ export default function _layout() {
              <Stack.Screen name="calendar" options={{ headerShown: false }} />
              <Stack.Screen name="chart" options={{ headerShown: false }} />
              <Stack.Screen name="cart" options={{ headerShown: false }} />
+             <Stack.Screen name="profile" options={{ headerShown: false }} />
         </Stack>
    </>
   )

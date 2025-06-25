@@ -15,6 +15,12 @@ export default function _layout() {
              <Stack.Screen name="chart" options={{ headerShown: false }} />
              <Stack.Screen name="cart" options={{ headerShown: false }} />
              <Stack.Screen name="profile" options={{ headerShown: false }} />
+             <Stack.Screen name="message" options={{ headerShown: false }} />
+             <Stack.Screen name="select" options={{ headerShown: false }} />
+              <Stack.Screen name="masonry" options={{ headerShown: false }} />
+               <Stack.Screen name="card" options={{ headerShown: false }} />
+               <Stack.Screen name="payment" options={{ headerShown: false }} />
+                 <Stack.Screen name="category" options={{ headerShown: false }} />
         </Stack>
    </>
   )

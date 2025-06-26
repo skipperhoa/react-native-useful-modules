@@ -3,6 +3,6 @@ import React from 'react'
 
 export default function IndexScreen() {
   return (
-   <Redirect href="/category" />
+   <Redirect href="/switch" />
   )
 }

@@ -21,6 +21,7 @@ export default function _layout() {
                <Stack.Screen name="card" options={{ headerShown: false }} />
                <Stack.Screen name="payment" options={{ headerShown: false }} />
                  <Stack.Screen name="category" options={{ headerShown: false }} />
+                 <Stack.Screen name="switch" options={{ headerShown: false }} />
         </Stack>
    </>
   )
